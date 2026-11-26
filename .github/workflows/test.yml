@@ -1,0 +1,17 @@
+name: Проверка
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Синтаксис
+        run: for f in *.js; do node --check "$f" || exit 1; done; jq empty manifest.webmanifest
+      - name: Тесты логики
+        run: node tests/core.test.js

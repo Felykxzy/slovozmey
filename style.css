@@ -1,0 +1,37 @@
+:root{--bg:#0a1116;--ink:#e8f6ee;--mut:#7f9a90;--g1:#7cffb2;--g2:#19b9a6;--gold:#ffd35c;--red:#ff5c6c;--tile:#f6e7b4;--panel:rgba(8,14,18,.86)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none;overflow:hidden}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);background:radial-gradient(90% 60% at 50% 0,#12302c 0,var(--bg) 70%)}
+#hud{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px 6px}
+#hud[hidden]{display:none}
+.hs{min-width:78px;display:flex;flex-direction:column}.hs.r{align-items:flex-end}
+.hs small{font-size:10px;letter-spacing:.2em;color:var(--mut);font-weight:700}
+.hs b{font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+#lives{color:var(--red);letter-spacing:.1em}
+#word{flex:1;display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
+#word i{font-style:normal;width:26px;height:32px;display:grid;place-items:center;border-radius:8px;font-weight:800;font-size:17px;border:2px solid rgba(255,255,255,.16);color:rgba(255,255,255,.35);transition:transform .15s}
+#word i.on{background:linear-gradient(160deg,var(--g1),var(--g2));border-color:transparent;color:#052018;transform:scale(1.06)}
+#word i.nx{border-color:var(--gold);color:var(--gold);animation:nx 1s ease-in-out infinite}
+@keyframes nx{50%{box-shadow:0 0 12px rgba(255,211,92,.55)}}
+#stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:4px 8px 64px;overflow:hidden}
+#cv{touch-action:none;border-radius:16px;box-shadow:0 0 0 1px rgba(124,255,178,.18),0 10px 40px rgba(0,0,0,.5);background:#0d1a1c}
+#pause{position:absolute;left:50%;margin-left:-22px;bottom:calc(10px + env(safe-area-inset-bottom));width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,17,22,.7);color:var(--ink);font-size:14px;cursor:pointer}
+#pause[hidden]{display:none}
+.panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;background:var(--panel);text-align:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.panel[hidden]{display:none}
+.logo{display:flex;flex-direction:column;line-height:.92;font-weight:900;font-size:clamp(46px,17vw,84px);letter-spacing:.04em}
+.logo span:first-child{color:var(--ink)}
+.logo span:last-child{background:linear-gradient(90deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent}
+#tag{margin:0;color:var(--mut);font-size:15px;max-width:290px;line-height:1.4}
+h2{margin:0;font-size:26px;letter-spacing:.14em}
+.big{border:0;border-radius:16px;padding:16px 44px;font-size:18px;font-weight:800;letter-spacing:.16em;color:#04231a;background:linear-gradient(135deg,var(--g1),var(--g2));cursor:pointer;box-shadow:0 8px 24px rgba(25,185,166,.3)}
+.big:active{transform:scale(.97)}
+.link{background:none;border:0;color:var(--mut);font-size:14px;letter-spacing:.1em;padding:8px;cursor:pointer;font-family:inherit}
+.muted{margin:0;color:var(--mut);font-size:14px}
+#langs{display:flex;gap:8px}
+#langs button{border:1px solid rgba(255,255,255,.18);background:none;color:var(--mut);border-radius:12px;padding:9px 16px;font-weight:700;letter-spacing:.1em;cursor:pointer;font-family:inherit}
+#langs button.on{background:rgba(124,255,178,.14);border-color:var(--g1);color:var(--g1)}
+.res{display:flex;flex-direction:column;align-items:center}.res b{font-size:64px;line-height:1;font-variant-numeric:tabular-nums}.res small{color:var(--mut);margin-top:6px;font-size:14px}
+ol{text-align:left;max-width:320px;margin:0;padding-left:22px;line-height:1.55;color:var(--ink);font-size:15px}
+ol li{margin-bottom:8px}
+@media (prefers-reduced-motion:reduce){#word i.nx{animation:none}}
