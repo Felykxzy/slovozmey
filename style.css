@@ -11,6 +11,7 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #word{flex:1;display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
 #word i{font-style:normal;width:26px;height:32px;display:grid;place-items:center;border-radius:8px;font-weight:800;font-size:17px;border:2px solid rgba(255,255,255,.16);color:rgba(255,255,255,.35);transition:transform .15s}
 #word i.on{background:linear-gradient(160deg,var(--g1),var(--g2));border-color:transparent;color:#052018;transform:scale(1.06)}
+#word i.hint{border-color:rgba(255,211,92,.55);color:rgba(255,211,92,.75)}
 #word i.nx{border-color:var(--gold);color:var(--gold);animation:nx 1s ease-in-out infinite}
 @keyframes nx{50%{box-shadow:0 0 12px rgba(255,211,92,.55)}}
 #stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:4px 8px 64px;overflow:hidden}

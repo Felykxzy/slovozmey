@@ -1,5 +1,5 @@
-const C = "slovozmey-v2";
-const F = ["./", "index.html", "style.css?v=101", "core.js?v=100", "app.js?v=100", "manifest.webmanifest", "icon.svg", "icon-512.png", "apple-touch-icon.png"];
+const C = "slovozmey-v3";
+const F = ["./", "index.html", "style.css?v=102", "core.js?v=102", "app.js?v=102", "manifest.webmanifest", "icon.svg", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(F)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== C).map(x => caches.delete(x)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", e => {

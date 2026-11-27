@@ -5,13 +5,13 @@
   var T = {
     ru: { score: "ОЧКИ", lives: "ЖИЗНИ", tag: "Ешь буквы по порядку и собирай слова", play: "ИГРАТЬ", how: "Как играть", ok: "ПОНЯТНО", over: "КОНЕЦ ИГРЫ", again: "ЕЩЁ РАЗ", menu: "В меню", pause: "ПАУЗА", resume: "ПРОДОЛЖИТЬ",
       best: "Рекорд: ", words: function (n) { return "слов собрано: " + n; }, newBest: "Новый рекорд!",
-      rules: ["Сверху показано слово. Веди змею и ешь его буквы по порядку.", "Управление: свайп по полю или стрелки на клавиатуре. Назад поворачивать нельзя.", "Неверная буква или столкновение с собой отнимает жизнь. Жизней три.", "Края поля проходные: выйдешь справа, появишься слева.", "Чем больше слов подряд без ошибок, тем больше очков."] },
+      rules: ["Сверху клеточки слова: видна только первая буква. Веди змею и ешь буквы по порядку. Можно собрать и своё слово той же длины: подходящая буква не отнимет жизнь.", "Управление: свайп по полю или стрелки на клавиатуре. Назад поворачивать нельзя.", "Неверная буква или столкновение с собой отнимает жизнь. Жизней три.", "Края поля проходные: выйдешь справа, появишься слева.", "Чем больше слов подряд без ошибок, тем больше очков."] },
     uk: { score: "ОЧКИ", lives: "ЖИТТЯ", tag: "Їж літери по порядку й збирай слова", play: "ГРАТИ", how: "Як грати", ok: "ЗРОЗУМІЛО", over: "КІНЕЦЬ ГРИ", again: "ЩЕ РАЗ", menu: "У меню", pause: "ПАУЗА", resume: "ПРОДОВЖИТИ",
       best: "Рекорд: ", words: function (n) { return "слів зібрано: " + n; }, newBest: "Новий рекорд!",
-      rules: ["Угорі показано слово. Веди змію й їж його літери по порядку.", "Керування: свайп по полю або стрілки на клавіатурі. Назад повертати не можна.", "Хибна літера або зіткнення з собою забирає життя. Життів три.", "Краї поля прохідні: вийдеш праворуч, з’явишся ліворуч.", "Чим більше слів поспіль без помилок, тим більше очок."] },
+      rules: ["Угорі клітинки слова: видно лише першу літеру. Веди змію й їж літери по порядку. Можна зібрати й власне слово тієї ж довжини: підходяща літера не забере життя.", "Керування: свайп по полю або стрілки на клавіатурі. Назад повертати не можна.", "Хибна літера або зіткнення з собою забирає життя. Життів три.", "Краї поля прохідні: вийдеш праворуч, з’явишся ліворуч.", "Чим більше слів поспіль без помилок, тим більше очок."] },
     en: { score: "SCORE", lives: "LIVES", tag: "Eat the letters in order to spell words", play: "PLAY", how: "How to play", ok: "GOT IT", over: "GAME OVER", again: "AGAIN", menu: "Menu", pause: "PAUSED", resume: "RESUME",
       best: "Best: ", words: function (n) { return "words spelled: " + n; }, newBest: "New best!",
-      rules: ["The word is shown at the top. Steer the snake and eat its letters in order.", "Controls: swipe on the board or use the arrow keys. You cannot turn back on yourself.", "A wrong letter or bumping into yourself costs a life. You have three.", "The edges wrap around: leave on the right, appear on the left.", "The more words in a row without mistakes, the more points."] }
+      rules: ["The word boxes are shown at the top with only the first letter revealed. Steer the snake and eat letters in order. You may spell your own word of the same length: a fitting letter costs no life.", "Controls: swipe on the board or use the arrow keys. You cannot turn back on yourself.", "A wrong letter or bumping into yourself costs a life. You have three.", "The edges wrap around: leave on the right, appear on the left.", "The more words in a row without mistakes, the more points."] }
   };
   var lang = "ru", G = null, raf = 0, last = 0, acc = 0, state = "menu", flash = 0, shake = 0, pops = [];
   var cv = $("cv"), ctx = cv.getContext("2d"), cell = 20, rows = 19, dpr = 1;
@@ -68,7 +68,7 @@
     $("score").textContent = G.score;
     var h = ""; for (var i = 0; i < SZ.LIVES; i++) h += i < G.lives ? "♥" : "·"; $("lives").textContent = h;
     var w = $("word"), s = "";
-    for (var k = 0; k < G.word.length; k++) s += '<i class="' + (k < G.idx ? "on" : k === G.idx ? "nx" : "") + '">' + (k < G.idx ? G.word[k] : k === G.idx ? "?" : "") + "</i>";
+    for (var k = 0; k < G.word.length; k++) s += '<i class="' + (k < G.idx ? "on" : k === 0 ? "hint" : k === G.idx ? "nx" : "") + '">' + (k < G.idx ? G.word[k] : k === 0 ? G.word[0] : k === G.idx ? "?" : "") + "</i>";
     w.innerHTML = s;
   }
 
@@ -137,6 +137,7 @@
     var head = G.snake[0];
     G.events.forEach(function (e) {
       if (e === "eat") { sfx.eat(G.combo); pops.push({ t: now, x: head.x, y: head.y, txt: "+" + (10 + Math.min(G.combo, 10) * 2), col: "#7cffb2" }); }
+      else if (e === "switch") { pops.push({ t: now, x: head.x, y: Math.max(1, head.y - 1), txt: "↻", col: "#9fd8ff" }); }
       else if (e === "word") { sfx.word(); pops.push({ t: now, x: Math.min(COLS - 3, Math.max(2, head.x)), y: Math.max(2, head.y - 1), txt: G.lastWord + "!", col: "#ffd35c" }); }
       else if (e === "wrong") { sfx.wrong(); flash = 1; shake = 8; }
       else if (e === "crash") { sfx.crash(); flash = 1; shake = 12; }

@@ -56,6 +56,15 @@
     if (!pool.length) pool = g.words;
     return pool[(g.rng() * pool.length) | 0];
   }
+  // Можно собрать своё слово: если съеденная буква не из задуманного слова,
+  // но подходит другому слову той же длины (с теми же первыми буквами), играем его
+  function findAlt(g, ch) {
+    var pre = g.word.slice(0, g.idx) + ch, n = g.word.length, seen = {}, pool = [];
+    g.words.forEach(function (w) {
+      if (w.length === n && w !== g.word && w.indexOf(pre) === 0 && !seen[w]) { seen[w] = 1; pool.push(w); }
+    });
+    return pool.length ? pool[(g.rng() * pool.length) | 0] : null;
+  }
   function nextWord(g) { g.prev = g.word; g.word = pickWord(g); g.idx = 0; }
 
   function randLetter(g) {
@@ -105,6 +114,9 @@
     var ti = tileAt(g, nx, ny);
     if (ti < 0) return;
     var t = g.tiles.splice(ti, 1)[0];
+    var alt = null;
+    if (t.ch !== g.word[g.idx]) alt = findAlt(g, t.ch);
+    if (alt) { g.word = alt; g.events.push("switch"); }
     if (t.ch === g.word[g.idx]) {
       g.idx++; g.combo++; g.grow++;
       g.score += 10 + Math.min(g.combo, 10) * 2;

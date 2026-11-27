@@ -33,4 +33,11 @@ for (const l of ["ru", "uk", "en"]) for (const x of SZ.WORDS[l]) for (const ch o
 assert.ok(SZ.speedMs(1) > SZ.speedMs(10)); assert.strictEqual(SZ.speedMs(99), 75);
 // 10. долгая игра на автопилоте не падает и не оставляет поле без нужной буквы
 g = mk("en"); const r = seeded(3); for (let i = 0; i < 4000 && !g.over; i++) { if (r() < .2) SZ.turn(g, [[1,0],[-1,0],[0,1],[0,-1]][(r()*4)|0][0], 0); SZ.step(g); if (!g.over) assert.ok(g.tiles.some(t => t.ch === g.word[g.idx]), "нужная буква есть всегда"); }
+// 11. своё слово: подходящая буква другого слова той же длины не отнимает жизнь
+g = SZ.createGame({ w: 13, h: 19, lang: "en", rng: seeded(5) });
+g.word = "STAR"; g.idx = 0; g.snake = [{ x: 4, y: 4 }, { x: 3, y: 4 }, { x: 2, y: 4 }]; g.dir = { x: 1, y: 0 }; g.tiles = [{ x: 5, y: 4, ch: "S" }];
+SZ.step(g); assert.strictEqual(g.word, "STAR"); g.idx = 0; g.snake = [{ x: 4, y: 4 }, { x: 3, y: 4 }, { x: 2, y: 4 }]; g.tiles = [{ x: 5, y: 4, ch: "M" }];
+SZ.step(g); assert.strictEqual(g.lives, 3, "MOON подходит по длине"); assert.strictEqual(g.word, "MOON"); assert.strictEqual(g.idx, 1);
+// буква, которой нет ни в одном слове той же длины, по-прежнему ошибка
+g.snake = [{ x: 4, y: 4 }, { x: 3, y: 4 }, { x: 2, y: 4 }]; g.dir = { x: 1, y: 0 }; g.tiles = [{ x: 5, y: 4, ch: "Z" }]; SZ.step(g); assert.strictEqual(g.lives, 2);
 console.log("core: все проверки прошли");
